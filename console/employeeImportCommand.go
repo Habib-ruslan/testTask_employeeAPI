@@ -46,7 +46,6 @@ func loadCSV(fileName string) error {
 	}
 	defer file.Close()
 
-	// Чтение CSV
 	reader := csv.NewReader(file)
 	records, err := reader.ReadAll()
 	if err != nil {
