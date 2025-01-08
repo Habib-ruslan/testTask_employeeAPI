@@ -9,8 +9,9 @@ RUN go mod tidy
 COPY . .
 
 # Компилируем приложение
-RUN go build -o main .
+RUN go build -o web ./cmd/web
+RUN go build -o cli ./cmd/cli
 
-CMD ["./main"]
+CMD ["./web"]
 
 EXPOSE 8000

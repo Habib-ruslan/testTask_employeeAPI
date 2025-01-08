@@ -1,6 +1,9 @@
 package models
 
+import "gorm.io/gorm"
+
 type Hourly struct {
+	gorm.Model
 	Id           uint    `gorm:"primary_key" json:"id"`
 	EmployeeId   uint    `json:"employee_id"`
 	TypicalHours int     `gorm:"default:0" json:"typical_hours"`

@@ -1,6 +1,6 @@
-package controllers
+package handlers
 
-import "testTask_employeeAPI/models"
+import "testTask_employeeAPI/internal/models"
 
 type EmployeeResponse struct {
 	Id             uint    `json:"id"`

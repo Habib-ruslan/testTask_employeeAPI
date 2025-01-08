@@ -2,25 +2,17 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"log"
-	"os"
-	"testTask_employeeAPI/app"
 	"testTask_employeeAPI/configs"
-	loadcsv "testTask_employeeAPI/console"
 	"testTask_employeeAPI/database"
-	"testTask_employeeAPI/models"
-	"testTask_employeeAPI/routes"
+	loadcsv "testTask_employeeAPI/internal/cli/comands"
+	"testTask_employeeAPI/internal/di"
+	"testTask_employeeAPI/internal/models"
 )
 
 func main() {
 	configure()
-
-	if len(os.Args) > 1 && os.Args[1] == "loadcsv" {
-		runConsole() // Консольная команда
-	} else {
-		runWeb() // Веб-приложение
-	}
+	runConsole() // Консольная команда
 }
 
 func configure() {
@@ -35,22 +27,16 @@ func configure() {
 		&models.Salary{},
 		&models.Hourly{},
 		&models.Job{},
+		&models.Progress{},
 	); err != nil {
 		log.Fatalf("Error migrating employee table: %v", err)
 	}
 
-	app.Init(conf, db)
-}
-
-func runWeb() {
-	r := gin.Default()
-	routes.RegisterRoutes(r)
-
-	r.Run(configs.GetConfig().Server.Port)
+	di.NewContainer(db, *conf)
 }
 
 func runConsole() {
-	cmd := loadcsv.NewCmd()
+	cmd := loadcsv.NewCmd(di.Current)
 	if err := cmd.Execute(); err != nil {
 		fmt.Println("Error executing command:", err)
 	}
